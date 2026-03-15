@@ -61,12 +61,6 @@ pm2 start ecosystem.config.js
 
 ---
 
-## 📸 Snapshot do Sistema
-
-*(Adicione aqui um screenshot da sua aplicação rodando)*
-
----
-
 ## 📄 Licença
 Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
 
