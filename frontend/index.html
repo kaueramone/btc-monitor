@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Monitor em tempo real do preço do Bitcoin com gráfico de candles de 5 minutos">
+  <title>BTC Monitor | Tempo Real</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="15" stroke="url(#btc-grad)" stroke-width="2" />
+          <text x="16" y="21" text-anchor="middle" fill="url(#btc-grad)" font-size="16" font-weight="700"
+            font-family="Inter">₿</text>
+          <defs>
+            <linearGradient id="btc-grad" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0%" stop-color="#F7931A" />
+              <stop offset="100%" stop-color="#FFD93D" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">BTC <span class="accent">Monitor</span></span>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="connection-status" id="connectionStatus">
+        <span class="status-dot"></span>
+        <span class="status-text">Conectando...</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="clock-badge" id="clockBadge">
+        <span class="badge-icon">🕐</span>
+        <span class="badge-text" id="clockBRT">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Price Dashboard -->
+    <section class="dashboard">
+      <div class="price-card glass-card">
+        <div class="price-label">BTCUSDT</div>
+        <div class="price-value" id="currentPrice">--,--</div>
+        <div class="price-change" id="priceChange">
+          <span class="change-arrow" id="changeArrow">—</span>
+          <span class="change-value" id="changeValue">0.00%</span>
+        </div>
+      </div>
+
+      <div class="info-card glass-card">
+        <div class="info-label">Preço Abertura (5min)</div>
+        <div class="info-value" id="openPrice">--,--</div>
+        <div class="info-sub" id="openPriceLabel">Aguardando...</div>
+      </div>
+
+      <div class="info-card glass-card">
+        <div class="info-label">Próximo Candle</div>
+        <div class="info-value countdown" id="candleCountdown">--:--</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="candleProgress"></div>
+        </div>
+      </div>
+
+      <div class="result-card glass-card" id="resultCard">
+        <div class="info-label">Resultado Atual</div>
+        <div class="result-direction" id="resultDirection">—</div>
+        <div class="result-percent" id="resultPercent">0.00%</div>
+      </div>
+    </section>
+
+    <!-- Marker Timeline -->
+    <section class="marker-section glass-card">
+      <div class="marker-header">
+        <h2 class="marker-title">Variação no Candle Atual <span class="marker-interval">cada 10s</span></h2>
+        <div class="marker-count" id="markerCount">0 / 30 marcações</div>
+      </div>
+      <div class="marker-timeline" id="markerTimeline">
+        <div class="marker-empty" id="markerEmpty">Aguardando marcações...</div>
+      </div>
+    </section>
+
+    <!-- Chart -->
+    <section class="chart-section glass-card">
+      <div class="chart-header">
+        <h2 class="chart-title">Gráfico de Candles <span class="chart-interval">5 min</span></h2>
+        <div class="chart-legend">
+          <span class="legend-item up"><span class="legend-dot"></span>Alta</span>
+          <span class="legend-item down"><span class="legend-dot"></span>Queda</span>
+        </div>
+      </div>
+      <div id="chart" class="chart-container"></div>
+      <div class="chart-overlay" id="chartOverlay">
+        <div class="overlay-content">
+          <div class="overlay-icon">📊</div>
+          <div class="overlay-text" id="overlayText">Aguardando dados...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OHLC Info -->
+    <section class="ohlc-section">
+      <div class="ohlc-card glass-card">
+        <span class="ohlc-label">Open</span>
+        <span class="ohlc-value" id="ohlcOpen">--</span>
+      </div>
+      <div class="ohlc-card glass-card">
+        <span class="ohlc-label">High</span>
+        <span class="ohlc-value high" id="ohlcHigh">--</span>
+      </div>
+      <div class="ohlc-card glass-card">
+        <span class="ohlc-label">Low</span>
+        <span class="ohlc-value low" id="ohlcLow">--</span>
+      </div>
+      <div class="ohlc-card glass-card">
+        <span class="ohlc-label">Close</span>
+        <span class="ohlc-value" id="ohlcClose">--</span>
+      </div>
+    </section>
+
+    <!-- Last Candle Result -->
+    <section class="last-result-section glass-card" id="lastResultSection" style="display:none;">
+      <div class="last-result-header">Último Candle Fechado</div>
+      <div class="last-result-body">
+        <div class="last-result-direction" id="lastResultDirection">—</div>
+        <div class="last-result-details">
+          <span id="lastResultOpen">--</span> → <span id="lastResultClose">--</span>
+          <span class="last-result-percent" id="lastResultPercent">(0.00%)</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>BTC Monitor &copy; 2026 — Dados via Binance — 24h</span>
+  </footer>
+
+  <!-- Lightweight Charts CDN -->
+  <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
